@@ -51,6 +51,6 @@ Shader "Custom/Render2"
 				return tex2D(_MainTex, i.uv) * _Tint;
             }
             ENDCG
-        }
-    }
+			}
+		}
 }
