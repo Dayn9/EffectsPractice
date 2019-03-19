@@ -6,24 +6,27 @@ using System.Collections.Generic;
 
 public class Raised : MonoBehaviour
 {
-    [SerializeField] private int radius = 5;
+    [SerializeField] private int innerRadius = 5;
     [SerializeField] private float appearSpeed = 5;
     [SerializeField] private Transform target;
 
     //[SerializeField] private List<MeshRenderer> objects;
 
     [SerializeField] private List<RaiseObject> objects;
-
     //private float[] values;
 
-    MaterialPropertyBlock props;
+    private MaterialPropertyBlock props;
 
-    public void AddObject(MeshRenderer obj)
+    public Vector3 Target { get { return target.position; } }
+
+    public RaiseObject AddObject(MeshRenderer obj)
     {
-        if(obj != null)
-        {
-            objects.Add(new RaiseObject(obj.transform, obj));
-        }
+        if (obj == null) { return null; }
+
+        RaiseObject r = new RaiseObject(obj.transform, obj);
+        objects.Add(r);
+        return r;
+
     }
 
     void Start()
@@ -41,7 +44,8 @@ public class Raised : MonoBehaviour
     {
         for(int i = 0; i< objects.Count; i++)
         {
-            if (Vector3.Distance(objects[i].transform.position, target.position) < radius)
+
+            if (Vector3.Distance(objects[i].transform.position, target.position) < innerRadius)
             {
                 objects[i].value = Mathf.Lerp(objects[i].value, 0, Time.deltaTime * appearSpeed);
             }
@@ -49,6 +53,7 @@ public class Raised : MonoBehaviour
             {
                 objects[i].value = Mathf.Lerp(objects[i].value, 1, Time.deltaTime * appearSpeed);
             }
+
             props.SetFloat("_Moved", objects[i].value);
             objects[i].renderer.SetPropertyBlock(props);
         }
@@ -56,7 +61,6 @@ public class Raised : MonoBehaviour
 
     [System.Serializable]
     public class RaiseObject {
-
         public Transform transform;
         public MeshRenderer renderer;
         public float value;

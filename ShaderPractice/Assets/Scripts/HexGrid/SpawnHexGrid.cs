@@ -20,6 +20,8 @@ public class SpawnHexGrid : MonoBehaviour
 
     private Raised raised; //ref to raised component
 
+    private Dictionary<Vector2, Raised.RaiseObject> grid;
+
     private void Awake()
     {
         //get a reference to the Raised script
@@ -30,19 +32,49 @@ public class SpawnHexGrid : MonoBehaviour
         axisOne = new Vector3(0, 0, axisLength);
         axisTwo = new Vector3(axisLength * Mathf.Sqrt(3) / 2, 0, -axisLength / 2);
 
+        grid = new Dictionary<Vector2, Raised.RaiseObject>();
+
         //create the hex grid
-        for(int a1 = -gridSize; a1 <= gridSize; a1++)
+        for (int a1 = -gridSize; a1 <= gridSize; a1++)
         {
             for (int a2 = -gridSize; a2 <= gridSize; a2++)
             {
                 //skip tiles that are ouside the hexagon grid
                 if (Mathf.Abs(a1) + Mathf.Abs(a2) > gridSize && Mathf.Sign(a1) != Mathf.Sign(a2)) continue;
-                
+
                 //create object and add object to the raised list
-                raised.AddObject(InstantiateOnHex(a1, a2).GetComponent<MeshRenderer>());
+                GameObject newObject = InstantiateOnHex(a1, a2);
+                grid.Add(new Vector2(a1, a2), raised.AddObject(newObject.GetComponent<MeshRenderer>()));
             }
         }
-        Debug.Log(WorldToHex(axisTwo));
+    }
+
+    private void Update()
+    {
+        Vector2 gridPos = WorldToHex(raised.Target);
+
+        if (gridPos.x > 1)
+        {
+            MoveA1(1);
+            origin += axisOne;
+        }
+        else if(gridPos.x < -1)
+        {
+            MoveA1(-1);
+            origin -= axisOne;
+        }
+
+        if (gridPos.y > 1)
+        {
+            MoveA2(1);
+            origin += axisTwo;
+        }
+        else if (gridPos.y < -1)
+        {
+            MoveA2(-1);
+            origin -= axisTwo;
+        }
+
     }
 
     /// <summary>
@@ -56,6 +88,70 @@ public class SpawnHexGrid : MonoBehaviour
         Vector3 position = origin + (a1 * axisOne) + (a2 * axisTwo);
         return Instantiate(hex, position, Quaternion.identity);
     }
+
+
+    private void MoveA1(float sign)
+    {
+        sign = Mathf.Sign(sign);
+
+        //create a replacement grid
+        Dictionary<Vector2, Raised.RaiseObject> newGrid = new Dictionary<Vector2, Raised.RaiseObject>();
+        //loop through positions in current grid
+        foreach(Vector2 gridPosition in grid.Keys)
+        {
+            Vector2 newGridPosition = gridPosition;
+            //check if object needs to be moved
+            if (gridPosition.x == gridSize * -sign || gridPosition.x == gridPosition.y + (gridSize * -sign))
+            {
+                //determine new grid position
+                newGridPosition = -gridPosition;
+
+                //move the RaisedObject to the newPosition
+                grid[gridPosition].transform.position = grid[newGridPosition].transform.position + (axisOne * sign);
+            }
+            else
+            {
+                //shift the other objects 
+                newGridPosition.x -= sign;
+            }
+
+            newGrid.Add(newGridPosition, grid[gridPosition]);
+        }
+        //replace the grid;
+        grid = newGrid;
+    }
+
+    private void MoveA2(float sign)
+    {
+        sign = Mathf.Sign(sign);
+
+        //create a replacement grid
+        Dictionary<Vector2, Raised.RaiseObject> newGrid = new Dictionary<Vector2, Raised.RaiseObject>();
+        //loop through positions in current grid
+        foreach (Vector2 gridPosition in grid.Keys)
+        {
+            Vector2 newGridPosition = gridPosition;
+            //check if object needs to be moved
+            if (gridPosition.y == gridSize * -sign || gridPosition.y == gridPosition.x + (gridSize * -sign))
+            {
+                //determine new grid position
+                newGridPosition = -gridPosition;
+
+                //move the RaisedObject to the newPosition
+                grid[gridPosition].transform.position = grid[newGridPosition].transform.position + (axisTwo * sign);
+            }
+            else
+            {
+                //shift the other objects 
+                newGridPosition.y -= sign;
+            }
+
+            newGrid.Add(newGridPosition, grid[gridPosition]);
+        }
+        //replace the grid;
+        grid = newGrid;
+    }
+
 
     /// <summary>
     /// Converts the World space coordinates oon to hex coordinates
