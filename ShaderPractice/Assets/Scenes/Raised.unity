@@ -225,7 +225,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
@@ -264,13 +264,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 246571633}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: 0.16494544, y: -0, z: -0, w: 0.9863027}
+  m_LocalPosition: {x: 0, y: 7.55, z: -16.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 18.988, y: 0, z: 0}
 --- !u!1 &366193435
 GameObject:
   m_ObjectHideFlags: 0
@@ -301,7 +301,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 087c961efe89de54e97b0c52537e1a7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 5
+  radius: 7
   appearSpeed: 5
   target: {fileID: 120986501}
   objects: []
@@ -334,7 +334,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hex: {fileID: 6422681289052839341, guid: 33e1abff3fb94d84cb549e00c94b8ba9, type: 3}
   radius: 1
-  gridSize: 5
+  gridSize: 7
 --- !u!1 &2036421198
 GameObject:
   m_ObjectHideFlags: 0

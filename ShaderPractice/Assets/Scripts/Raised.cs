@@ -10,24 +10,29 @@ public class Raised : MonoBehaviour
     [SerializeField] private float appearSpeed = 5;
     [SerializeField] private Transform target;
 
-    [SerializeField] private List<MeshRenderer> objects;
-    public float[] values;
+    //[SerializeField] private List<MeshRenderer> objects;
+
+    [SerializeField] private List<RaiseObject> objects;
+
+    //private float[] values;
 
     MaterialPropertyBlock props;
 
     public void AddObject(MeshRenderer obj)
     {
-        if(obj != null) 
-            objects.Add(obj);
+        if(obj != null)
+        {
+            objects.Add(new RaiseObject(obj.transform, obj));
+        }
     }
 
     void Start()
     {
         props = new MaterialPropertyBlock();
-        values = new float[objects.Count];
+ 
         for (int i = 0; i < objects.Count; i++)
         {
-            objects[i].SetPropertyBlock(props);
+            objects[i].renderer.SetPropertyBlock(props);
         }
     }
 
@@ -38,16 +43,30 @@ public class Raised : MonoBehaviour
         {
             if (Vector3.Distance(objects[i].transform.position, target.position) < radius)
             {
-                values[i] = Mathf.Lerp(values[i], 0, Time.deltaTime * appearSpeed);
+                objects[i].value = Mathf.Lerp(objects[i].value, 0, Time.deltaTime * appearSpeed);
             }
             else
             {
-                values[i] = Mathf.Lerp(values[i], 1, Time.deltaTime * appearSpeed);
+                objects[i].value = Mathf.Lerp(objects[i].value, 1, Time.deltaTime * appearSpeed);
             }
-            props.SetFloat("_Moved", values[i]);
-            objects[i].SetPropertyBlock(props);
+            props.SetFloat("_Moved", objects[i].value);
+            objects[i].renderer.SetPropertyBlock(props);
         }
+    }
 
-        
+    [System.Serializable]
+    public class RaiseObject {
+
+        public Transform transform;
+        public MeshRenderer renderer;
+        public float value;
+
+        public RaiseObject(Transform t, MeshRenderer r, float v = 0)
+        {
+            transform = t;
+            renderer = r;
+            value = v;
+        }
     }
 }
+

@@ -39,11 +39,11 @@
 
 		void vert(inout appdata_full v)
 		{
-			//v.vertex.xyz *= 1 - UNITY_ACCESS_INSTANCED_PROP(Props, _Moved);
+			v.vertex.xyz *= 1 - UNITY_ACCESS_INSTANCED_PROP(Props, _Moved);
 			//v.vertex.y *= 1 - UNITY_ACCESS_INSTANCED_PROP(Props, _Moved);
 			
-			v.vertex.x *= 1;
-			v.vertex.z *= 1;
+			//v.vertex.x *= 1;
+			//v.vertex.z *= 1;
 			v.vertex.y -= 1 * UNITY_ACCESS_INSTANCED_PROP(Props, _Moved);
 		}
 
