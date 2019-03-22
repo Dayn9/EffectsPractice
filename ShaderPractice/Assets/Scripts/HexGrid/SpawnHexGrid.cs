@@ -47,6 +47,7 @@ public class SpawnHexGrid : MonoBehaviour
                 grid.Add(new Vector2(a1, a2), raised.AddObject(newObject.GetComponent<MeshRenderer>()));
             }
         }
+
     }
 
     private void Update()

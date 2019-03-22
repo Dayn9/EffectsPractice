@@ -361,7 +361,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 087c961efe89de54e97b0c52537e1a7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  innerRadius: 7
+  innerRadius: 3
+  outerRadius: 5
   appearSpeed: 5
   target: {fileID: 120986501}
   objects: []

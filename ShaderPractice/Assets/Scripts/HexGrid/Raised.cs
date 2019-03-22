@@ -7,6 +7,7 @@ using System.Collections.Generic;
 public class Raised : MonoBehaviour
 {
     [SerializeField] private int innerRadius = 5;
+    [SerializeField] private int outerRadius = 7;
     [SerializeField] private float appearSpeed = 5;
     [SerializeField] private Transform target;
 
@@ -42,19 +43,25 @@ public class Raised : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        for(int i = 0; i< objects.Count; i++)
+        for (int i = 0; i< objects.Count; i++)
         {
-
-            if (Vector3.Distance(objects[i].transform.position, target.position) < innerRadius)
+            float distance = (objects[i].transform.position - target.position).sqrMagnitude;
+            if(distance < innerRadius * innerRadius)
             {
-                objects[i].value = Mathf.Lerp(objects[i].value, 0, Time.deltaTime * appearSpeed);
+                objects[i].value = Mathf.Lerp(objects[i].value, 1f, Time.deltaTime * appearSpeed);
+            }
+            else if (distance < outerRadius * outerRadius)
+            {
+                objects[i].value = Mathf.Lerp(objects[i].value, 0.5f, Time.deltaTime * appearSpeed);
             }
             else
             {
-                objects[i].value = Mathf.Lerp(objects[i].value, 1, Time.deltaTime * appearSpeed);
+                objects[i].value = Mathf.Lerp(objects[i].value, 0, Time.deltaTime * appearSpeed);
             }
 
             props.SetFloat("_Moved", objects[i].value);
+            props.SetFloat("_PositionX", objects[i].transform.position.x);
+            props.SetFloat("_PositionZ", objects[i].transform.position.z);
             objects[i].renderer.SetPropertyBlock(props);
         }
     }
