@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/Scenes/LorenzAttractor.unity
+    guid: d12ec1a99ba3759479666d038c7c3d7d
   m_configObjects: {}
